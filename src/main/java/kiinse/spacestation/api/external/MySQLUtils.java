@@ -80,12 +80,30 @@ public class MySQLUtils {
      */
     public static String getLogin(String chat) {
         try {
+            var ps = Objects.requireNonNull(MySQL.getConnection()).prepareStatement("SELECT login FROM " + MySQL.getDataBaseName() + ".users WHERE chat = ?");
+            ps.setString(1, chat);
+            var rs = ps.executeQuery();
+            return rs.next() ? rs.getString("login") : null;
+        } catch (SQLException e) {
+            log.warn("Произошла ошибка getLogin. Код ошибки: {}", e.getErrorCode());
+        }
+        return null;
+    }
+
+    /**
+     * Метод получения значения "username" у указанного Чата в БД
+     *
+     * @param chat String значение ID чата пользователя
+     * @return Возвращает значение строки "UserName"
+     */
+    public static String getUsername(String chat) {
+        try {
             var ps = Objects.requireNonNull(MySQL.getConnection()).prepareStatement("SELECT username FROM " + MySQL.getDataBaseName() + ".users WHERE chat = ?");
             ps.setString(1, chat);
             var rs = ps.executeQuery();
             return rs.next() ? rs.getString("username") : null;
         } catch (SQLException e) {
-            log.warn("Произошла ошибка getLogin. Код ошибки: {}", e.getErrorCode());
+            log.warn("Произошла ошибка getUsername. Код ошибки: {}", e.getErrorCode());
         }
         return null;
     }

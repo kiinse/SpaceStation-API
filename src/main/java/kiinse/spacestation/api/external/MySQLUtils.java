@@ -142,4 +142,40 @@ public class MySQLUtils {
         }
     }
 
+    /**
+     * Метод для установки значения "НЕ УКАЗАНО" в "login" у указанного пользователя в БД
+     *
+     * @param chat String значение ID чата пользователя
+     */
+    public static void setUnspecified(String chat) {
+        try {
+            var ps = Objects.requireNonNull(MySQL.getConnection()).prepareStatement("UPDATE " + MySQL.getDataBaseName() + ".users SET login = ? WHERE Chat = ?");
+            ps.setString(1, "НЕ УКАЗАНО");
+            ps.setString(2, chat);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            log.warn("Произошла ошибка setUnspecified. Код ошибки: {}", e.getErrorCode());
+        }
+    }
+
+    /**
+     * Метод проверки пользователя в БД на установленную группу
+     *
+     * @param chat String значение ID чата пользователя
+     * @return Возвращает True если у пользователя в строке "login" значение "НЕ УКАЗАНО"
+     */
+    public static Boolean isUnspecified(String chat) {
+        try {
+            var ps = Objects.requireNonNull(MySQL.getConnection()).prepareStatement("SELECT login FROM " + MySQL.getDataBaseName() + ".users WHERE Chat = ?");
+            ps.setString(1, String.valueOf(chat));
+            var rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getString("login").equals("НЕ УКАЗАНО");
+            }
+        } catch (SQLException e) {
+            log.warn("Произошла ошибка isUnspecified. Код ошибки: {}", e.getErrorCode());
+        }
+        return false;
+    }
+
 }

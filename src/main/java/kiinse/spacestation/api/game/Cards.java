@@ -112,7 +112,8 @@ public class Cards {
                 " <b>→ Навыки:</b> " + card.getString("skill") + "\n" +
                 " <b>→ Фобии:</b> " + card.getString("phobia") + "\n" +
                 " <b>→ Болезнь:</b> " + card.getString("disease") + "\n" +
-                " <b>→ Предметы:</b> " + card.getString("item");
+                " <b>→ Предметы:</b> " + card.getString("item") + "\n\n" +
+                " <b>Ключ карточки:</b> " + card.hashCode();
     }
 
 }
